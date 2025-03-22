@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --background: #dee0dfff;
+  --foreground: #16222aff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #dee0dfff;
+    --foreground: #dee0dfff;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* src/index.css */
+@font-face {
+  font-family: 'Cooper Black';
+  src: url('../../public/assets/fonts/cooper-black/COOPBL.TTF') format('truetype');
+}
+
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('../../public/assets/fonts/Century-Gothic/centurygothic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Bauhaus 93';
+  src: url('../../public/assets/fonts/bauhaus-93/Bauhaus-93-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Palatino Linotype';
+  src: url('../../public/assets/fonts/Palatino-Linotype/palatinolinotype_roman.ttf') format('truetype');
+}
