@@ -49,7 +49,7 @@ export default function FormComponent() {
 
     useEffect(() => {
         if (taskId === null) return;
-        const socket = new WebSocket(`ws://13.48.136.156/ws/api/check/proccess/${taskId}/`);
+        const socket = new WebSocket(`ws://ec2-13-48-136-156.eu-north-1.compute.amazonaws.com/ws/api/check/proccess/${taskId}/`);
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -90,7 +90,7 @@ export default function FormComponent() {
     const createTrip = async () => {
         dispatch(setLoadAnimate(true));
         setDisable(true);
-        const response = await axios.post("http://13.48.136.156/api/trip/create/", {
+        const response = await axios.post("http://ec2-13-48-136-156.eu-north-1.compute.amazonaws.com/api/trip/create/", {
             serializer: {
                 start_location: currentLocation.location_name,
                 pickup_location: pickupLocation.location_name,
@@ -111,7 +111,7 @@ export default function FormComponent() {
     // handle , search inputs
     const debouncedSearch = useCallback(
         debounce(async (query) => {
-            const response = await axios.get(`http://13.48.136.156/api/trip/search/?q=${query}&task_id=${taskId === null ? "null" : taskId}`);
+            const response = await axios.get(`http://ec2-13-48-136-156.eu-north-1.compute.amazonaws.com/api/trip/search/?q=${query}&task_id=${taskId === null ? "null" : taskId}`);
             response.data.task_id != taskId && setTaskId(response.data.task_id)
         }, 500),
         []
