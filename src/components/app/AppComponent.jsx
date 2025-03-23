@@ -52,7 +52,7 @@ export default function AppComponent() {
                 <Loading />
             </div>}
             <div className=' w-full h-full grid md:grid-cols-3 xs:grid-cols-1 gap-4'>
-                <div className='order-3 shadow-drop-br md:order-none h-full bg-emerald-900 overflow-hidden'
+                <div className='order-3 shadow-drop-br md:order-none h-full min-h-[200px] bg-emerald-900 overflow-hidden'
                     style={{
                         borderRadius: isMobile ? "1em" : "0 3em 3em 3em",
                         width: isMobile ? "95%" : "100%",
