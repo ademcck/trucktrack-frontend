@@ -12,7 +12,7 @@ const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 export default function Loading() {
     const [animationData, setAnimationData] = useState(null);
     const dispatch = useDispatch();
-    const { message, url } = useSelector((state) => state.main);
+    const { message, url, taskId } = useSelector((state) => state.main);
 
     useEffect(() => {
         if (animationData === null) {
@@ -23,20 +23,39 @@ export default function Loading() {
 
         }
     }, []);
-    const handleDownload = () => {
-        const baseUrl = "https://trucktrack.publicvm.com/media"
-        const pdfUrl = baseUrl + url;
-        
-        const link = document.createElement('a');
-        link.href = pdfUrl;
-        
-        link.download = 'route.pdf';
-        
-        document.body.appendChild(link);
-        link.click();
-        
-        document.body.removeChild(link);
-      };
+    const handleDownload = async () => {
+        const pdfUrl = `https://trucktrack.publicvm.com/download_pdf/${taskId}`;
+
+        try {
+            // Fetch the PDF file
+            const response = await fetch(pdfUrl);
+            if (!response.ok) {
+                throw new Error("File not found or inaccessible.");
+            }
+
+            // Get the response as a blob
+            const blob = await response.blob();
+
+            // Create a downloadable URL from the blob
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            // Create a link element to trigger the download
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'route.pdf'; // Name of the file to be downloaded
+
+            // Trigger the download
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl); // Free up the blob URL
+        } catch (error) {
+            console.error("Download error:", error);
+            alert("Failed to download the file. Please try again.");
+        }
+    };
 
     return (
         <div className='relative flex flex-col justify-center items-center w-full h-full' style={{
