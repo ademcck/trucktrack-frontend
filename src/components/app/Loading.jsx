@@ -24,7 +24,7 @@ export default function Loading() {
         }
     }, []);
     const handleDownload = async () => {
-        const pdfUrl = `https://trucktrack.publicvm.com/download_pdf/${taskId}`;
+        const pdfUrl = `https://trucktrack.publicvm.com/api/trip/download_pdf/${taskId}`;
 
         try {
             // Fetch the PDF file
