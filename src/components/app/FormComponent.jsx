@@ -49,7 +49,7 @@ export default function FormComponent() {
 
     useEffect(() => {
         if (taskId === null) return;
-        const socket = new WebSocket(`ws://trucktrack.publicvm.com/ws/api/check/proccess/${taskId}/`);
+        const socket = new WebSocket(`wss://trucktrack.publicvm.com/ws/api/check/proccess/${taskId}/`);
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
