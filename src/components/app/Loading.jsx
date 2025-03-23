@@ -24,7 +24,7 @@ export default function Loading() {
         }
     }, []);
     const handleDownload = () => {
-        const baseUrl = "https://trucktrack.publicvm.com/"
+        const baseUrl = "https://trucktrack.publicvm.com/media"
         // PDF dosyasının yolunu belirtin
         const pdfUrl = baseUrl + url;
         
