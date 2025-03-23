@@ -4,10 +4,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     
     theme: "light",
-
+    // task id
+    taskId: "null",
     // map data
     route_data: null,
     driver_log: null,
+
     // app right panel
     leftMapCreate: false,
     rightMapCreate: false,
@@ -52,10 +54,13 @@ export const MainSlice = createSlice({
         setLoadAnimate: (state, action) => {
             state.load_animate = action.payload;
         },
+        setTaskId : (state, action) => {
+            state.taskId = action.payload;
+        },
   
     },
 });
 
 
-export const { setMessageAndUrl, setLoadAnimate, setLeftMapCreate, setRightMapCreate, setMapCreate, setRouteDriveData, setLonLat } = MainSlice.actions;
+export const { setTaskId, setMessageAndUrl, setLoadAnimate, setLeftMapCreate, setRightMapCreate, setMapCreate, setRouteDriveData, setLonLat } = MainSlice.actions;
 export default MainSlice.reducer;

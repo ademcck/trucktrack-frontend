@@ -10,17 +10,16 @@ import { useSelector } from 'react-redux';
 import { getColor, getcolorflat } from '@/app/theme';
 import axios from "axios";
 import { useDispatch } from 'react-redux';
-import { setLeftMapCreate, setLoadAnimate, setMessageAndUrl, setRightMapCreate, setRouteDriveData } from '@/app/GlobalRedux/reducers/app/Main';
+import { setLeftMapCreate, setLoadAnimate, setMessageAndUrl, setRightMapCreate, setRouteDriveData, setTaskId } from '@/app/GlobalRedux/reducers/app/Main';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import debounce from "lodash/debounce";
 
 export default function FormComponent() {
-    const {theme} = useSelector((state) => state.main);
+    const {theme, taskId} = useSelector((state) => state.main);
     const dispatch = useDispatch();
     const [color, setColor] = React.useState(null);
     const [flatcolor, setFlatColor] = React.useState(null);
     const [locations, setLocations] = React.useState([]);
-    const [taskId, setTaskId] = React.useState("null");
     const taskIdRef = React.useRef(taskId);
     const [searchInput, setSearchInput] = React.useState(false);
     const [query, setQuery] = React.useState("");
@@ -53,7 +52,7 @@ export default function FormComponent() {
 
     const getTask = async () => {
         const response = await axios.get(`https://trucktrack.publicvm.com/api/trip/generate_task/`);
-        setTaskId(response.data.task_id)
+        dispatch(setTaskId(response.data.task_id));
         connectWebSocket(response.data.task_id);
     }
 

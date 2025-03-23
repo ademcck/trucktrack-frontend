@@ -23,39 +23,20 @@ export default function Loading() {
 
         }
     }, []);
-    const handleDownload = async () => {
-        const baseUrl = "https://trucktrack.publicvm.com/media";
+    const handleDownload = () => {
+        const baseUrl = "https://trucktrack.publicvm.com/media"
         const pdfUrl = baseUrl + url;
-    
-        try {
-            // Fetch the file
-            const response = await fetch(pdfUrl);
-            if (!response.ok) {
-                throw new Error("File not found or inaccessible.");
-            }
-    
-            // Get the response as a blob
-            const blob = await response.blob();
-    
-            // Create a downloadable URL from the blob
-            const blobUrl = window.URL.createObjectURL(blob);
-    
-            // Create a link element to trigger the download
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = 'route.pdf'; // Name of the file to be downloaded
-    
-            // Trigger the download
-            document.body.appendChild(link);
-            link.click();
-    
-            // Clean up
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(blobUrl); // Free up the blob URL
-        } catch (error) {
-            console.error("Download error:", error);
-        }
-    };
+        
+        const link = document.createElement('a');
+        link.href = pdfUrl;
+        
+        link.download = 'route.pdf';
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        document.body.removeChild(link);
+      };
 
     return (
         <div className='relative flex flex-col justify-center items-center w-full h-full' style={{
