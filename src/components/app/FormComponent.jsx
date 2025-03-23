@@ -21,6 +21,7 @@ export default function FormComponent() {
     const [flatcolor, setFlatColor] = React.useState(null);
     const [locations, setLocations] = React.useState([]);
     const [taskId, setTaskId] = React.useState("null");
+    const taskIdRef = React.useRef(taskId);
     const [searchInput, setSearchInput] = React.useState(false);
     const [query, setQuery] = React.useState("");
 
@@ -41,15 +42,30 @@ export default function FormComponent() {
 
 
     useEffect(() => {
+        if (taskId === "null"){
+            getTask();
+        }
         setColor(getColor(theme, "color"));
         setFlatColor(getcolorflat(theme, "color"));
     }, [])
 
-    // connect Websocket
+    // get task
+
+    const getTask = async () => {
+        const response = await axios.get(`https://trucktrack.publicvm.com//api/trip/generate_task/`);
+        setTaskId(response.data.task_id)
+        connectWebSocket(response.data.task_id);
+    }
 
     useEffect(() => {
-        if (taskId === "null") return;
-        const socket = new WebSocket(`wss://trucktrack.publicvm.com/ws/api/check/proccess/${taskId}/`);
+        taskIdRef.current = taskId;
+    }, [taskId]);
+
+    // connect Websocket
+
+    const connectWebSocket = (taskID) => {
+        if (taskID === "null") return;
+        const socket = new WebSocket(`wss://trucktrack.publicvm.com/ws/api/check/proccess/${taskID}/`);
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -66,7 +82,7 @@ export default function FormComponent() {
         };
 
         return () => socket.close();
-    }, [taskId]);
+    };
 
 
     // notify
@@ -88,7 +104,7 @@ export default function FormComponent() {
     const createTrip = async () => {
         dispatch(setLoadAnimate(true));
         setDisable(true);
-        const response = await axios.post("https://trucktrack.publicvm.com/api/trip/create/", {
+        await axios.post("https://trucktrack.publicvm.com//api/trip/create/", {
             serializer: {
                 start_location: currentLocation.location_name,
                 pickup_location: pickupLocation.location_name,
@@ -101,17 +117,16 @@ export default function FormComponent() {
             start_lon: pickupLocation.location_lon,
             end_lat: dropoffLocation.location_lat,
             end_lon: dropoffLocation.location_lon,
-            ccu: cycle
+            ccu: cycle,
+            task_id: taskId
         });
-        setTaskId(response.data.task_id);
     };
 
     // handle , search inputs
     const debouncedSearch = useCallback(
         debounce(async (query) => {
-            const response = await axios.get(`https://trucktrack.publicvm.com/api/trip/search/?q=${query}&task_id=${taskId}`);
-            response.data.task_id != taskId && setTaskId(response.data.task_id)
-        }, 500),
+            await axios.get(`https://trucktrack.publicvm.com//api/trip/search/?q=${query}&task_id=${taskIdRef.current}`);
+        }, 300),
         []
     )
     const searchHandler = (event) => {
