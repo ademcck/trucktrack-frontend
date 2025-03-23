@@ -52,7 +52,7 @@ export default function FormComponent() {
     // get task
 
     const getTask = async () => {
-        const response = await axios.get(`https://trucktrack.publicvm.com//api/trip/generate_task/`);
+        const response = await axios.get(`https://trucktrack.publicvm.com/api/trip/generate_task/`);
         setTaskId(response.data.task_id)
         connectWebSocket(response.data.task_id);
     }
@@ -104,7 +104,7 @@ export default function FormComponent() {
     const createTrip = async () => {
         dispatch(setLoadAnimate(true));
         setDisable(true);
-        await axios.post("https://trucktrack.publicvm.com//api/trip/create/", {
+        await axios.post("https://trucktrack.publicvm.com/api/trip/create/", {
             serializer: {
                 start_location: currentLocation.location_name,
                 pickup_location: pickupLocation.location_name,
@@ -125,7 +125,7 @@ export default function FormComponent() {
     // handle , search inputs
     const debouncedSearch = useCallback(
         debounce(async (query) => {
-            await axios.get(`https://trucktrack.publicvm.com//api/trip/search/?q=${query}&task_id=${taskIdRef.current}`);
+            await axios.get(`https://trucktrack.publicvm.com/api/trip/search/?q=${query}&task_id=${taskIdRef.current}`);
         }, 300),
         []
     )
