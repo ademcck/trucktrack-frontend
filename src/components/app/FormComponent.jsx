@@ -20,7 +20,7 @@ export default function FormComponent() {
     const [color, setColor] = React.useState(null);
     const [flatcolor, setFlatColor] = React.useState(null);
     const [locations, setLocations] = React.useState([]);
-    const [taskId, setTaskId] = React.useState(null);
+    const [taskId, setTaskId] = React.useState("null");
     const [searchInput, setSearchInput] = React.useState(false);
     const [query, setQuery] = React.useState("");
 
@@ -48,7 +48,7 @@ export default function FormComponent() {
     // connect Websocket
 
     useEffect(() => {
-        if (taskId === null) return;
+        if (taskId === "null") return;
         const socket = new WebSocket(`wss://trucktrack.publicvm.com/ws/api/check/proccess/${taskId}/`);
 
         socket.onmessage = (event) => {
@@ -56,7 +56,6 @@ export default function FormComponent() {
 
             if (data.type === "info") {
                 // Display incoming info messages on the screen
-                console.log({ message: data.message, url: data.url,  url_validate: data.url === undefined  });
                 dispatch(setMessageAndUrl({ message: data.message, url: data.url }));
             } else if (data.status === "completed") {
                 // If the task is complete, process route and log data
@@ -104,16 +103,14 @@ export default function FormComponent() {
             end_lon: dropoffLocation.location_lon,
             ccu: cycle
         });
-        console.log(response.data.task_id)
         setTaskId(response.data.task_id);
     };
 
     // handle , search inputs
     const debouncedSearch = useCallback(
         debounce(async (query) => {
-            const response = await axios.get(`https://trucktrack.publicvm.com/api/trip/search/?q=${query}&task_id=${taskId === null ? "null" : taskId}`);
+            const response = await axios.get(`https://trucktrack.publicvm.com/api/trip/search/?q=${query}&task_id=${taskId}`);
             response.data.task_id != taskId && setTaskId(response.data.task_id)
-            console.log(response.data.task_id, taskId)
         }, 500),
         []
     )
