@@ -15,7 +15,7 @@ import { ToastContainer, toast, Slide } from 'react-toastify';
 import debounce from "lodash/debounce";
 
 export default function FormComponent() {
-    const {theme, url} = useSelector((state) => state.main);
+    const {theme} = useSelector((state) => state.main);
     const dispatch = useDispatch();
     const [color, setColor] = React.useState(null);
     const [flatcolor, setFlatColor] = React.useState(null);
@@ -57,7 +57,6 @@ export default function FormComponent() {
             if (data.type === "info") {
                 // Display incoming info messages on the screen
                 console.log({ message: data.message, url: data.url,  url_validate: data.url === undefined  });
-
                 dispatch(setMessageAndUrl({ message: data.message, url: data.url }));
             } else if (data.status === "completed") {
                 // If the task is complete, process route and log data
@@ -105,6 +104,7 @@ export default function FormComponent() {
             end_lon: dropoffLocation.location_lon,
             ccu: cycle
         });
+        console.log(response.data.task_id)
         setTaskId(response.data.task_id);
     };
 
@@ -113,6 +113,7 @@ export default function FormComponent() {
         debounce(async (query) => {
             const response = await axios.get(`https://trucktrack.publicvm.com/api/trip/search/?q=${query}&task_id=${taskId === null ? "null" : taskId}`);
             response.data.task_id != taskId && setTaskId(response.data.task_id)
+            console.log(response.data.task_id, taskId)
         }, 500),
         []
     )
